@@ -2,6 +2,8 @@
   <div id="app">
     <h1>{{ company }}</h1>
     <img src="./assets/logo.png">
+    <!-- 用在组件上 绑定css-->
+    <MyComponent v-bind:class="{ hide: isHide}"></MyComponent>
     <!-- 组件来构建大型应用 -->
     <HelloWorld/>
     <!-- 条件判断 -->
@@ -33,6 +35,7 @@
 <script>
 import HelloWorld from './components/HelloWorld'
 import child from './components/TodoItem'
+import MyComponent from './components/myComponent' 
 
 export default {
   name: 'App',
@@ -54,12 +57,14 @@ export default {
         { text: 'Cheese' },
         { text: 'Whatever else humans are supposed to eat' },
         { text: 'ssssssssssssss' }
-      ]
+      ],
+      isHide:false,
     }
   },
   components: {
     HelloWorld,
-    child
+    child,
+    MyComponent
   },
   methods: {
     reverseMessage() {
@@ -80,5 +85,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.hide {
+  display:none;
 }
 </style>
