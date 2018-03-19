@@ -10,7 +10,7 @@
     <p>Using v-html directive:<span v-html="rawHtml"></span></p>
     <!-- #特性:v-bind -->
     <div v-bind:id="'div_' + dynamicId">动态绑定id</div>
-    <button type="button" v-bind:disabled="isButtonDisabled">按钮的禁用</button>
+    <button type="button" v-bind:disabled="isButtonDisabled" class="btn btn-default">按钮的禁用</button>
     <hr/>
     <!-- javascript -->
     javascript计算：<span style="color:green">{{ number+1 }}</span><br/>
@@ -24,8 +24,8 @@
         修饰符 (Modifiers) 是以半角句号 . 指明的特殊后缀，用于指出一个指令应该以特殊方式绑定。例如，.prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault()：
     -->
     <!-- 去掉修饰符.prevent就能提交 -->
-    <form v-on:submit.prevent="onSubmit">
-      <input type="submit" name="提交">
+    <form v-on:submit.prevent="onSubmit" class="form-group">
+      <input type="submit" name="提交" class="btn btn-default btn-primary">
     </form>
     <hr/>
     <h3>以上的都是全写，下面的缩写</h3>
@@ -62,6 +62,9 @@
     <!-- 数组语法 -->
     <div v-bind:class="[activeClass, errorClass]">数组语法</div>
     <div v-bind:class="[isActive ? activeClass : '', errorClass]">三元表达式</div>
+    <hr>
+      <h2></h2>
+      <div v-bind:style=""> </div>
     <hr>
     </div>
 </template>
