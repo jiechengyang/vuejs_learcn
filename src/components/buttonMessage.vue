@@ -1,7 +1,8 @@
-<template>
+ <template>
 	<div>
-		<input type="text" v-model="message" />
-		<button v-on:click="handleSendMessage">发送</button>
+		<input type="text" v-model="message"  class="form-control"/>
+		<!-- spin -->
+		<button v-on:click="handleSendMessage" class="btn btn-default"><icon name="send" scale="1" ></icon> 发送</button>
 	</div>
 </template>
 <script>

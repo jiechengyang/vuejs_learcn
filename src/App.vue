@@ -3,14 +3,14 @@
     <!-- <div class="row"> -->
         <div class="navbar-top">
           <ul class="nav nav-tabs  navbar-navnav-menu">
-            <li role="presentation" class="active"><a href="#jiaocheng1" data-toggle="tab">模板语法~事件处理</a>|</li>
-            <li role="presentation"><a href="#jiaocheng2" data-toggle="tab">表单输入绑定~组件</a>|</li>
-            <li role="presentation"><a href="#jiaocheng3" data-toggle="tab">过渡 & 动画~可复用性 & 组合</a>|</li>
+            <li role="presentation" class="active"><a href="#jiaocheng1" data-toggle="tab">模板语法~事件处理</a></li>
+            <li role="presentation"><a href="#jiaocheng2" data-toggle="tab">表单输入绑定~组件</a></li>
+            <li role="presentation"><a href="#jiaocheng3" data-toggle="tab">过渡 & 动画~可复用性 & 组合</a></li>
             <li role="presentation"><a href="#jiaocheng4" data-toggle="tab">规模化(路由/状态管理/服务端渲染)~内在(深入响应式原理)</a></li>
           </ul>
         </div>
         <div  class="tab-content">
-            <div class="jiaocheng1  tab-pane fade in active show" id="jiaocheng1">
+            <div class="jiaocheng1  tab-pane fade in active" id="jiaocheng1">
               <div class="row">
                  <div class=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
                       <h1>{{ company }}</h1>
@@ -267,6 +267,38 @@
                     <p v-for="msgd in msgData">{{ msgd }}</p>
                     <p><buttonMessage v-on:message="handleMessage"></buttonMessage></p>
                   </div>
+                  <!-- 给组件绑定原生事件 -->
+                  <div class="form-inline">
+                    <bindProtoEvent @click.native="doTheThing" class="my_cursor"></bindProtoEvent>
+                  </div>
+                  <div class="form-inline">
+                    <!-- sync 修饰符 -->
+                    <syncTest :foo.sync="bar"></syncTest>
+                    <span>{{ bar }}</span>
+                    <!-- <syncTest :foo="bar" @update:foo="val => bar = val"></syncTest> -->                    
+                  </div>
+                  <!-- 使用自定义事件的表单输入组件 -->
+                  <div class="form-inline">
+                      <h4>使用自定义事件的表单输入组件</h4>
+                      <currencyInput label="Price" v-model="price"></currencyInput>
+                      <currencyInput label="Shipping" v-model="shipping"></currencyInput>
+                      <currencyInput label="Handling" v-model="handling"></currencyInput>
+                      <currencyInput label="Discount"  v-model="discount"></currencyInput>
+                      <p>CountMoney: ${{ countMoney }}</p>
+                  </div>
+                  <div class="form-inline">
+                      <h4>自定义组件的 v-model</h4>
+                      <myCheckbox v-model="foo"></myCheckbox>
+                  </div>
+                  <h3 class="text-info">使用插槽分发内容</h3>
+                  <textarea readonly="readonly" class="form-control" cols="4" rows="10">
+  自己这段时间在自学vue.js，发现关于插槽这方面，官方文档中，没有详细的讲解使用方法与示例，我自己试着来总结了一下。然后根据官方文档写了几个使用插槽的例子。每个例子都要引入vue.js。示例中上面为HTML代码，下面为JavaScript代码。
+  最初在 "slot" 标签中的任何内容都被视为备用内容。备用内容在子组件的作用域内编译，并且只有在宿主元素为空，且没有要插入的内容时才显示备用内容
+                  </textarea>  
+                  <div class="form-inline">
+                      <h4>一、单个插槽</h4>
+                      <myOneParentCom></myOneParentCom>
+                  </div>
                 </div>
               </div>
             </div>
@@ -286,6 +318,12 @@ import CheckProps from './components/CheckProp'
 import bs_date_input from './components/bs_date_input'
 import buttonCounter from './components/buttonCounter'
 import buttonMessage from './components/buttonMessage'
+import bindProtoEvent from './components/bindProtoEvent'
+import syncTest from './components/syncTest'
+import currencyInput from './components/currencyInput'
+import utils from './js/utils'
+import myCheckbox from './components/my-checkbox'
+import myOneParentCom from './components/myOneParentCom' // 单个插槽--父组件
 
 export default {
   name: 'App',
@@ -331,6 +369,12 @@ export default {
       age: null,
       total: 0,
       msgData: [],
+      bar: 0,
+      price: '0',
+      shipping: '0',
+      handling: '0',
+      discount: '0',
+      foo: 0,
     }
   },
   components: {
@@ -343,6 +387,12 @@ export default {
     bs_date_input,
     buttonCounter,
     buttonMessage,
+    bindProtoEvent,
+    syncTest,
+    currencyInput,
+    myCheckbox,
+    myOneParentCom,
+
   },
   methods: {
     reverseMessage() {
@@ -389,6 +439,14 @@ export default {
     handleMessage: function(payload) {
       this.msgData.push(payload.message);
     },
+    doTheThing: function() {
+      alert('doTheThing');
+    }
+  },
+  computed: {
+    countMoney: function() {
+      return ((this.price * 100 +  this.shipping * 100 + this.handling * 100 - this.discount * 100) / 100).toFixed(2);
+    }
   }
 }
 
@@ -405,5 +463,8 @@ export default {
 }
 .hide {
   display:none;
+}
+.my_cursor {
+  cursor:pointer;
 }
 </style>

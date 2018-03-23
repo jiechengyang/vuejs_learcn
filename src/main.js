@@ -5,7 +5,12 @@ import App from './App'
 import $ from 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
+import 'vue-awesome/icons'
+import Icon from 'vue-awesome/components/Icon'
 
+// 全局注册（在 `main .js` 文件中）
+// 请访问FontAwesome 官网以查询可以使用的 name 值，如 beer、file、camera 等
+Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
 var testData = {
@@ -19,7 +24,7 @@ var testData = {
 /* eslint-disable no-new */
 var vm = new Vue({	
   el: '#app',
-  components: { App },
+  components: {App},
   template: '<App/>',
   data: testData,
   created(){
