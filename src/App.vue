@@ -298,11 +298,45 @@
                   <div class="form-inline">
                       <h4>一、单个插槽</h4>
                       <myOneParentCom></myOneParentCom>
+                      <h4>二、具名插槽</h4>
+                      <myTwoParentCom></myTwoParentCom>
+                      <h4>三、作用域插槽</h4>
+                      <myThreeParentCom></myThreeParentCom>
+                  </div>
+                  <div class="form-inline">
+                      <h4>异步组件</h4>
+                      <!-- 点击按钮后，show为真,先获取child组件，再渲染div内容 -->
+                      <input type="button"  @click="showchild" value="显示/隐藏" class="btn btn-default">
+                      <div id="contain" v-if="show">
+                          <asyncChild></asyncChild>
+                      </div>
+                  </div>
+                  <div class="form-inline">
+                      <h4>组件间的循环引用示例</h4>
+                      <ul class="post-list">
+                        <li v-for="folder in folders">
+                          <tree-folder :folder="folder"></tree-folder>
+                        </li>
+                      </ul>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="jiaocheng3 tab-pane fade" id="jiaocheng3">jiaocheng3</div>
+            <div class="jiaocheng3 tab-pane fade" id="jiaocheng3">
+              <div class="row">
+                <h3 class="text-info">单元素/组件的过渡</h3>
+                <div class="form-inline">
+                    <button type="button" class="btn btn-default btn-danger" @click="show = !show">Toggle</button>
+                    <transition name="fade">
+                      <p v-if="show">hello</p>
+                    </transition>
+                </div>
+                <h3 class="text-info">CSS过渡</h3>
+                <div class="form-inline">
+                    <button type="button" @click="show = !show"></button>
+                </div>
+              </div>
+            </div>
             <div class="jiaocheng3 tab-pane fade" id="jiaocheng4">jiaocheng4</div>
         </div>
     <!-- </div> -->
@@ -324,6 +358,9 @@ import currencyInput from './components/currencyInput'
 import utils from './js/utils'
 import myCheckbox from './components/my-checkbox'
 import myOneParentCom from './components/myOneParentCom' // 单个插槽--父组件
+import myTwoParentCom from './components/myTwoParentCom' // 具名插槽--父组件
+import myThreeParentCom from './components/myThreeParentCom' //作用域插槽--父组件
+import TreeFolder from './components/tree-folder'
 
 export default {
   name: 'App',
@@ -375,6 +412,54 @@ export default {
       handling: '0',
       discount: '0',
       foo: 0,
+      asyncMsg: '异步组件',
+      show:false,
+      folders: [
+        {
+          name: 'folder1',
+          children: [{
+            name: 'folder1 - folder1',
+            children: [{
+              name: 'folder1 - folder1 - folder1'
+            }]
+          }, {
+            name: 'folder1 - folder2',
+            children: [{
+              name: 'folder1 - folder2 - folder1'
+            }, {
+              name: 'folder1 - folder2 - folder2'
+            }]
+          }]
+        },
+        {
+          name: 'folder 2',
+          children: [{
+            name: 'folder2 - folder1',
+            children: [{
+              name: 'folder2 - folder1 - folder1'
+            }]
+          }, {
+            name: 'folder2 - folder2',
+            children: [{
+              name: 'folder2-content1'
+            }]
+          }]
+        },
+        {
+          name: 'folder 3',
+          children: [{
+            name: 'folder3 - folder1',
+            children: [{
+              name: 'folder3 - folder1 - folder1'
+            }]
+          }, {
+            name: 'folder3 - folder2',
+            children: [{
+              name: 'folder3-content1'
+            }]
+          }]
+        }
+      ],
     }
   },
   components: {
@@ -392,6 +477,12 @@ export default {
     currencyInput,
     myCheckbox,
     myOneParentCom,
+    myTwoParentCom,
+    myThreeParentCom,
+    asyncChild: function(resolve) {
+        require(['./components/asyncChild.vue'], resolve);
+    },
+    TreeFolder,
 
   },
   methods: {
@@ -441,7 +532,15 @@ export default {
     },
     doTheThing: function() {
       alert('doTheThing');
-    }
+    },
+    showchild: function() {
+      if(!this.show) {
+        this.show = true;
+      } else {
+        this.show = false; 
+      }
+      
+    },
   },
   computed: {
     countMoney: function() {
@@ -466,5 +565,11 @@ export default {
 }
 .my_cursor {
   cursor:pointer;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
