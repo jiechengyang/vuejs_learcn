@@ -333,7 +333,176 @@
                 </div>
                 <h3 class="text-info">CSS过渡</h3>
                 <div class="form-inline">
-                    <button type="button" @click="show = !show"></button>
+                    <button type="button" @click="show = !show" class="btn btn-default">CSS过渡</button>
+                </div>
+<!--                 <h3 class="text-info">CSS动画</h3>
+                <div class="form-inline">
+                    <button type="button" class="btn btn-success" @click="show = !show">Toggle Show</button>
+                    <transition name="bounce">
+                      <p v-if="show">
+                        乱数假文悲哀坐特，consectetur adipiscing精英。莫里斯facilisis ENIM自由，在发酵的ID。pellentesque居民已经叉丝直径tristique塞涅克图斯等netus
+                      </p>
+                    </transition>
+                </div> -->
+                <h3 class="text-info">自定义过渡的类名</h3>
+                <div class="form-inline">
+                    <button type="button" class="btn btn-info" @click="show = !show">切换渲染</button>
+                    <transition 
+                      name="custom-classes-transition"
+                      enter-active-class="animated tada"
+                      leave-active-class="animated bounceOutRight"
+                    ></transition>
+                    <div class="text-muted" v-if="show">
+                      曾经有一份真诚的爱情摆在我面前，但是我没有珍惜，尘世间最痛苦的事莫过于此。如果上天可以给我个机会再来一次的话，我会跟那个女孩说我爱她。如果非要把这份爱加上一个期限，我希望是……一万年
+                    </div>
+                </div>
+                <h3 class="text-info">显性的过渡持续时间</h3>
+                <div class="form-inline">
+                    <button type="button" class="btn btn-default" @click="show = !show">Velocity效果</button>
+                    <transition
+                      v-on:before-enter="beforeEnter"
+                      v-on:enter="enter"
+                      v-on:leave="leave"
+                      v-bind:css="false"
+                    >
+                    <!-- <transition
+                      v-on:before-enter="beforeEnter"
+                      v-on:enter="enter"
+                      v-on:after-enter="afterEnter"
+                      v-on:enter-cancelled="enterCancelled"
+
+                      v-on:before-leave="beforeLeave"
+                      v-on:leave="leave"
+                      v-on:after-leave="afterLeave"
+                      v-on:leave-cancelled="leaveCancelled"
+                    >
+                    </transition> -->
+                      <pre v-if="show">
+                          是怕你，不是怕我。
+                          最讨厌就是欺骗
+                          除了说钱，还有其它的吗？
+                      </pre>
+                    </transition>
+                </div>
+                <h3 class="text-info">appear-初始渲染的过渡</h3>
+<!--                 <div class="form-inline">
+                    <transition
+                      appear
+                      appear-class="custom-appear-class"
+                      appear-to-class="custom-appear-to-class"
+                      appear-active-class="custom-appear-active-class"
+                      v-on:before-appear="customBeforeAppearHock"
+                      v-on:appear="customAppearHock"
+                      v-on:after-appear="customAfterAppearHock"
+                      v-on:appear-cacelled="customAppearCancelledHook"
+                    >
+                      
+                    </transition>
+                </div> -->
+                <h3 class="text-info">多个元素的过渡</h3>
+                <div class="form-inline">
+<!--                     <transition>
+                      <table v-if="todos.length > 0" class="table table-bordered table-hover text-center">
+                        <thead>
+                          <tr>
+                            <th align="center">值</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="todo in todos">
+                            <td>{{ todo.text }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <p v-else>Sorry, no items found.</p>
+                    </transition> -->
+                    <transition>
+                      <!-- 方案一 -->
+<!--                       <button type="button" class="btn btn-success" v-bind:key="isEditing">
+                      {{ isEditing ? '保存' : '修改' }}
+                      </button> -->
+                      <!-- 方案二 -->
+<!--                       <button v-if="docState === 'saved'" key="saved">
+                      Edit
+                      </button>
+                      <button v-if="docState === 'edited'" key="edited">
+                      Save
+                      </button>
+                      <button v-if="docState === 'editing'" key="editing">
+                      Cancel
+                      </button>    -->
+                      <!-- 方案三 -->
+                      <button v-bind:key="docState" name="fade" mode="out-in" class="btn btn-default">
+                        {{ buttonMessage }}
+                      </button>                   
+                    </transition>
+                </div>
+                <h3 class="text-info">列表的进入/离开过渡</h3>
+                <div class="form-inline">
+                  <button v-on:click="shuffle" class="btn btn-info">Shuffle</button>
+                  <button v-on:click="addNumberItem" class="btn btn-success"><i class="fa fa-save"></i>添加</button>
+                  <button v-on:click="removeNumberItem" class="btn btn-danger"><i class="fa fa-remove"></i>删除</button>
+                   <transition-group name="list-complete" tag="p">
+                      <span
+                        v-for="nItem in numberItems"
+                        v-bind:key="nItem"
+                        class="list-complete-item"
+                      >
+                        {{ nItem }}
+                      </span>
+                    </transition-group>
+                </div>
+                <h3 class="text-info">列表的交错过渡</h3>
+                <pre>通过 data 属性与 JavaScript 通信 ，就可以实现列表的交错过渡：</pre>
+                <div class="form-inline">
+                    <input type="text" class="form-control" v-model="query" @focus="showCompleteList" @blur="hideCompleteList">
+                    <transition-group
+                      name="staggered-fade"
+                      tag="ul"
+                      @before-enter="beforeEnter"
+                      @enter="enter"
+                      @leave="leave"
+                      class="list-unstyled"
+                      :style="showCompleteStyle"
+                    >
+                      <li
+                        v-for="(item, index) in computedList"
+                        :key="item.msg"
+                        :data-index="index"
+                        style="cursor:pointer"
+                        class="hr-line-dashed"
+                        @click="sureQuery"
+                      >
+                        {{ item.msg }}
+                      </li>
+                    </transition-group>
+                </div>
+                <h3 class="text-info">动态过渡</h3>
+                <pre>在 Vue 中即使是过渡也是数据驱动的！动态过渡最基本的例子是通过 name 特性来绑定动态值。</pre>
+                <div class="form-inline">
+                  <label>音量控制条(淡入)</label>
+                  <input type="range" name="control-list" v-model="fadeInDuration" min="0" :max="maxFadeDuration" class="form-control">
+                  <label>音量控制条(淡出)</label>
+                  <input type="range" name="control-list" v-model="fadeOutDuration" min="0" :max="maxFadeDuration" class="form-control">
+                  <transition
+                    v-on:before-enter="beforeEnter"
+                    v-on:enter="enter"
+                    v-on:leave="leave"
+                  >
+                    <p v-if="show">此浪非彼浪，一浪更比一浪强</p>
+                  </transition>
+                  <button 
+                    type="button"
+                    v-if="stop"
+                    v-on:click="stop = false; show = false"
+                    class="btn btn-default"
+                  >开始动画</button>
+                  <button 
+                    type="button"
+                    v-else
+                    v-on:click="stop = true"
+                    class="btn btn-default"
+                  >停止动画</button>
                 </div>
               </div>
             </div>
@@ -361,6 +530,7 @@ import myOneParentCom from './components/myOneParentCom' // 单个插槽--父组
 import myTwoParentCom from './components/myTwoParentCom' // 具名插槽--父组件
 import myThreeParentCom from './components/myThreeParentCom' //作用域插槽--父组件
 import TreeFolder from './components/tree-folder'
+import velocityUtil from './assets/js/velocity.min.js'
 
 export default {
   name: 'App',
@@ -460,6 +630,23 @@ export default {
           }]
         }
       ],
+      docState: 'saved',
+      numberItems: [1,2,3,4,5,6,7,8,9],
+      nextNum: 10,
+      complateLists: [
+        { msg: 'Bruce Lee' },
+        { msg: 'Jackie Chan' },
+        { msg: 'Chuck Norris' },
+        { msg: 'Jet Li' },
+        { msg: 'Kung Fury' }
+      ],
+      query: '',
+      showComplete: false,
+      showCompleteStyle: 'display:none',
+      fadeInDuration: 1000,
+      fadeOutDuration: 1000,
+      maxFadeDuration: 1500,
+      stop: true,
     }
   },
   components: {
@@ -484,6 +671,9 @@ export default {
     },
     TreeFolder,
 
+  },
+  mounted: function() {
+    this.show = false
   },
   methods: {
     reverseMessage() {
@@ -541,16 +731,139 @@ export default {
       }
       
     },
+    // --------
+    // 进入中
+    // --------
+    beforeEnter: function(el) {
+        console.log('el:', el);
+        el.style.opacity = 0;
+        el.style.transformOrigin = 'left';
+        el.style.height = 0
+    },
+    // 此回调函数是可选项的设置
+    // 与 CSS 结合时使用
+    enter: function(el, done) {
+      console.log("enter done is:", done);
+      // Velocity(el, {opacity: 1, fontSize: '1.4em'}, {duration: 300});
+      // Velocity(el, {fontSize: '1em'}, {complete: done});
+      // done()
+      var delay = el.dataset.index * 150;
+      var vm = this;
+      setTimeout(function(){
+        Velocity(el, {opacity: 1, height: '1.6em'}, {complete: done}
+        )
+      }, delay)
+      Velocity(el,
+        { opacity: 1 },
+        {
+          duration: this.fadeInDuration,
+          complete: function () {
+            done()
+            if (!vm.stop) vm.show = false
+          }
+        }
+      )
+    },
+    // 此回调函数是可选项的设置
+    // 与 CSS 结合时使用
+    leave: function(el, done) {
+      console.log("leave done is:", done);
+      // Velocity(el, { translateX: '15px', rotateZ: '50deg' }, { duration: 600 })
+      // Velocity(el, { rotateZ: '100deg' }, { loop: 2 })
+      // Velocity(el, {
+      //   rotateZ: '45deg',
+      //   translateY: '30px',
+      //   translateX: '30px',
+      //   opacity: 0
+      // }, { complete: done }) 
+      var delay = el.dataset.index;
+      setTimeout(function() {
+          Velocity(el, {opacity: 0, height: 0}, {complete: done})
+           }, delay)   
+      var vm = this;
+      Velocity(el,
+        { opacity: 0 },
+        {
+          duration: this.fadeOutDuration,
+          complete: function () {
+            done()
+            vm.show = true
+          }
+        }
+      )      
+    },
+    afterEnter: function (el) {
+      // ...
+    },
+    enterCancelled: function (el) {
+      // ...
+    },
+    // --------
+    // 离开时
+    // --------
+    beforeLeave: function (el) {
+      // ...
+    },
+    afterLeave: function (el) {
+      // ...
+    },
+    // leaveCancelled 只用于 v-show 中
+    leaveCancelled: function (el) {
+      // ...
+    },
+    randomIndex: function () {
+      return Math.floor(Math.random() * this.numberItems.length)
+    },
+    addNumberItem: function () {
+      this.numberItems.splice(this.randomIndex(), 0, this.nextNum++)
+    },
+    removeNumberItem: function () {
+      this.numberItems.splice(this.randomIndex(), 1)
+    },
+    shuffle: function () {
+      this.numberItems = _.shuffle(this.numberItems)
+    },
+    showCompleteList: function (el) {
+      this.showCompleteStyle = 'display:block';
+    },
+    hideCompleteList: function(el) {
+      var that = this;
+      setTimeout(() => {
+        that.showCompleteStyle = 'display:none';
+      }, 200)
+    },
+    sureQuery: function(el) {
+      console.log('筛选过后，单击选中的dom为：', el.target.innerText);
+      this.query = el.target.innerText;
+    }
   },
   computed: {
     countMoney: function() {
       return ((this.price * 100 +  this.shipping * 100 + this.handling * 100 - this.discount * 100) / 100).toFixed(2);
+    },
+    buttonMessage: function() {
+      switch(this.docState) {
+        case 'saved': return 'Edit'
+        case 'edited': return 'Save'
+        case 'editing': return 'Cancel'
+      }
+    },
+    computedList: function() {
+      var _self = this;
+      return this.complateLists.filter(function(item) {
+          var result = item.msg.toLowerCase().indexOf(_self.query.toLowerCase()) !== -1;
+
+          return result;
+
+      })
     }
   }
 }
 
 </script>
-
+<style scoped>
+  @import './assets/css/animate.css';
+</style>
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -571,5 +884,47 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to
+/* .list-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.list-complete-item {
+  transition: all 1s;
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-complete-enter, .list-complete-leave-to
+/* .list-complete-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.list-complete-leave-active {
+  position: absolute;
 }
 </style>
