@@ -40,7 +40,7 @@
 			// // 自定义验证函数
 			propF: {
 			  validator: function (value) {
-			  	console.log('propF：%d', value);
+			  	// console.log('propF：%d', value);
 			    return value > 10
 			  }
 			}

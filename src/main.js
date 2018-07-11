@@ -13,6 +13,9 @@ import Icon from 'vue-awesome/components/Icon'
 Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
+// 取消 Vue 所有的日志与警告--默认false
+// Vue.config.silent = true;
+// console.log('vue config', Vue.config);
 var testData = {
 	a: 1,
 	foo: 'bar',
@@ -29,24 +32,25 @@ var vm = new Vue({
   data: testData,
   created(){
     // `this` 指向 vm 实例
-    console.log('a is: ' + this.a);  	
+    // console.log('a is: ' + this.a);  	
   },
   items: ['a', 'b', 'c'],
 })
 
 // 获得这个实例上的属性
 // 返回源数据中对应的字段
-console.log('result:', vm.a == testData.a);
+// console.log('result:', vm.a == testData.a);
 // 设置属性也会影响到原始数据
 vm.a = 2
-console.log('testData a is :', testData.a);
+// console.log('testData a is :', testData.a);
 // ……反之亦然
 testData.a = 3
 vm.b = 'hi';
-console.log('vm a is :', vm.a);
+// console.log('vm a is :', vm.a);
 Vue.set(vm.userProfile, 'age', 27);
 vm.$set(vm.userProfile, 'sex', '男');
-console.log(vm.userProfile);
+// console.log(vm.userProfile);
+
 // // Vue.set
 // Vue.set(vm.items, indexOfItem, newValue)
 // // Array.prototype.splice
