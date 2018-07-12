@@ -6,7 +6,7 @@
             <li role="presentation" class="active"><a href="#jiaocheng1" data-toggle="tab">模板语法~事件处理</a></li>
             <li role="presentation"><a href="#jiaocheng2" data-toggle="tab">表单输入绑定~组件</a></li>
             <li role="presentation"><a href="#jiaocheng3" data-toggle="tab">过渡 & 动画~可复用性 & 组合</a></li>
-            <li role="presentation"><a href="#jiaocheng4" data-toggle="tab">API</a></li>
+            <li role="presentation"><a href="#jiaocheng4" data-toggle="tab">插件~过滤</a></li>
           </ul>
         </div>
         <div  class="tab-content">
@@ -98,8 +98,8 @@
                     </p>
                   </div>
                   <h3 class="text-info">事件处理-按键修饰符</h3>
-                  <div>
-                    <input  v-model="keyword" v-on:keyup.13="submit" placeholder="回车提交"/>
+                  <div class="form-group">
+                    <input  v-model="keyword" v-on:keyup.13="submit" placeholder="输入手机号码回车提交验证合法性" class="form-control" ref="phoneInput"/>
                     <!-- 同上 -->
                     <!-- <input v-on:keyup.enter="submit"> -->
                     <!-- 缩写语法 -->
@@ -527,6 +527,7 @@ unbind：只调用一次，指令与元素解绑时调用。
                       <anchored-heading :level="2" >Render变态写法</anchored-heading>
                       <custom-prop :level="3">完成我们最开始想实现的组件</custom-prop>
                       <smart-list :items="[{id:1, pid: 0, title: '组织架构', url: '#'}, {id:10, pid: 1, title: '前台用户', url: 'user/index'}, {id:20, pid: 1, title: '后台用户', url: 'admin-user/index'}, {id:30, pid: 1, title: '用户组', url: 'groups/index'}]">下面是一个依赖传入 props 的值的 smart-list 组件例子，它能代表更多具体的组件</smart-list>
+                      <div><slot :text="message"></slot></div>
                       <div class="alert alert-danger">{{ blogTitle }}</div>
                       <pre>
 render: function (createElement) {
@@ -545,33 +546,50 @@ render: function (createElement) {
   )
 }
                       </pre>
-                      <!-- <h1>{{ blogTitle }}</h1> -->
-<!--                       <script type="text/x-template" id="anchoredHeadingTemplate">
-                          <h1 v-if="level === 1">
-                            <slot></slot>
-                          </h1>
-                          <h2 v-else-if="level === 2">
-                            <slot></slot>
-                          </h2>
-                          <h3 v-else-if="level === 3">
-                            <slot></slot>
-                          </h3>
-                          <h4 v-else-if="level === 4">
-                            <slot></slot>
-                          </h4>
-                          <h5 v-else-if="level === 5">
-                            <slot></slot>
-                          </h5>
-                          <h6 v-else-if="level === 6">
-                            <slot></slot>
-                          </h6>
-                      </script> -->
+                    </div>
+                    <div class="form-inline">
+                        <h5>开发插件</h5>
+                        <div style="display:inline-block">
+                            <input type="number"  v-model="shuzi" class="form-control" style="width:80px">
+                        </div>
+                        <div style="display:inline-block">
+                            <button type="button" class="btn  btn-default" @click="double">点击翻倍</button>
+                        </div>
+                        <div>
+                            {{ new Date().getTime() | formatTime('yyyy年MM月dd日 hh:mm:ss') }}
+                        </div>
+                    </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="jiaocheng4 tab-pane fade" id="jiaocheng4">jiaocheng4</div>
+              <div class="jiaocheng4 tab-pane fade" id="jiaocheng4">
+                  <div class="container">
+                      <div class="row">
+                          <div class="box box-success">
+                             <div class="media">
+                                <div class="media-heading">
+                                  <b>自定义插件</b>
+                                </div>
+                                <div  class="media-body">
+                                  <vue-toast></vue-toast>
+                                </div>
+                             </div>
+                             <div class="media">
+                                <div class="media-heading">
+                                  <b>过滤器</b>
+                                </div>
+                                <div  class="media-body">
+                                  <p>原来:{{ filters }}</p>
+                                  <p>过滤之后:{{ filters | oushu }}</p>
+                                </div>
+                             </div>
+                          </div>
+                      </div>                    
+                  </div>
+
+              </div>
+
         </div>
     <!-- </div> -->
   </div>
@@ -596,6 +614,7 @@ import myTwoParentCom from './components/myTwoParentCom' // 具名插槽--父组
 import myThreeParentCom from './components/myThreeParentCom' //作用域插槽--父组件
 import TreeFolder from './components/tree-folder'
 import velocityUtil from './assets/js/velocity.min.js'
+import VueToast from './components/vue-toast'
 
 var EmptyList = { /* ... */ }
 var TableList = 'table'
@@ -718,7 +737,9 @@ export default {
       stop: true,
       bootsform: 'form-control',
       message: '钩子函数',
-      blogTitle: 'JCMCMS'
+      blogTitle: 'JCMCMS',
+      shuzi: 1995,
+      filters: '1,2,3,4,5,6,78,9,10,203,45,109,134'
     }
   },
   components: {
@@ -763,7 +784,7 @@ export default {
     CustomProp: {
       render: function (createElement) {
           // 创建 kebabCase 风格的ID
-          console.log('插槽(slots):', this.$slots);
+          // console.log('插槽(slots):', this.$slots);
           var headingId = getChildrenTextContent(this.$slots.default)
           .toLowerCase()
           .replace(/\W+/g, '-')
@@ -814,7 +835,19 @@ export default {
           context.children
         )
       }
-    }
+    },
+    ScopedSlots: {
+      props: ['message'],
+      render: function (createElement) {
+        // `<div><slot :text="message"></slot></div>`
+        return createElement('div', [
+          this.$scopedSlots.default({
+            text: this.message
+          })
+        ])
+      }
+    },
+    VueToast
   },
   mounted: function() {
     this.show = false
@@ -840,8 +873,16 @@ export default {
       }
       alert(message);
     },
-    submit: function() {
-      alert("提交成功(您的答案是:" + this.keyword + ")");
+    submit: function(ele) {
+      if (! this.$service.phoneNumberCheck(this.keyword) ) {
+        alert('您输入手机号码不正确');
+        this.keyword = '';
+        this.$refs.phoneInput.focus();
+
+        return;
+      }
+
+      alert("提交成功(您的号码是:" + this.$service.phoneFromat(this.keyword) + ")");
     },
     doThis: function(event) {
       console.log(event);
@@ -979,6 +1020,10 @@ export default {
     sureQuery: function(el) {
       console.log('筛选过后，单击选中的dom为：', el.target.innerText);
       this.query = el.target.innerText;
+    },
+    double: function(el) {
+      // vm.testAlert();
+      this.shuzi = this.doubleNumber(this.shuzi);
     }
   },
   computed: {
@@ -1025,6 +1070,16 @@ export default {
         ;
       }
     }
+  },
+  filters: {/*过滤器*/
+     oushu: function(value) {
+          var arr = value.split(',');
+          var newarr = arr.filter(function(item){
+              return (parseInt(item) % 2) == 0;
+          })
+          console.log(newarr);
+          return newarr.join(',');
+     }
   }
 }
 
