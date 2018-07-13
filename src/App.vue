@@ -547,18 +547,6 @@ render: function (createElement) {
 }
                       </pre>
                     </div>
-                    <div class="form-inline">
-                        <h5>开发插件</h5>
-                        <div style="display:inline-block">
-                            <input type="number"  v-model="shuzi" class="form-control" style="width:80px">
-                        </div>
-                        <div style="display:inline-block">
-                            <button type="button" class="btn  btn-default" @click="double">点击翻倍</button>
-                        </div>
-                        <div>
-                            {{ new Date().getTime() | formatTime('yyyy年MM月dd日 hh:mm:ss') }}
-                        </div>
-                    </div>
                     </div>
                   </div>
                 </div>
@@ -572,6 +560,18 @@ render: function (createElement) {
                                   <b>自定义插件</b>
                                 </div>
                                 <div  class="media-body">
+                                  <div class="form-inline">
+                                    <h5>开发插件</h5>
+                                    <div style="display:inline-block">
+                                      <input type="number"  v-model="shuzi" class="form-control" style="width:80px">
+                                    </div>
+                                    <div style="display:inline-block">
+                                      <button type="button" class="btn  btn-default" @click="double">点击翻倍</button>
+                                    </div>
+                                    <div>
+                                      {{ new Date().getTime() | formatTime('yyyy年MM月dd日 hh:mm:ss') }}
+                                    </div>
+                                  </div>
                                   <vue-toast></vue-toast>
                                 </div>
                              </div>
